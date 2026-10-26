@@ -40,6 +40,8 @@ The project is guided by three questions:
   - most tweets contain **fewer than ~20 words**
   - noisy text with abbreviations and high lexical variability
 
+![Original humanitarian-label distribution in the training set](figures/Original_Label_Distribution.jpg)
+
 ---
 
 ## Severity Scale Construction (Core Contribution)
@@ -59,10 +61,6 @@ creating a decision-oriented severity target rather than a descriptive taxonomy.
 **Protocol note (important for fairness):**
 After mapping, the new severity variable is **merged back into the original train/validation/test splits**,
 and all models are trained/evaluated on these **fixed mapped splits** for direct comparability.
-
-![Severity distribution across the original training, validation, and test splits](figures/severity_distribution_by_split.svg)
-
-The mapped target remains strongly imbalanced across all three splits. Bars show percentages and counts **before lexicon-guided oversampling**; Urgent and Critical together account for only 5.9% of the test set.
 
 ---
 
@@ -158,6 +156,10 @@ Reported metrics include:
 Gains are driven primarily by more stable predictions for majority classes (Routine/Elevated) and modest improvement for Critical,
 while **Urgent recall remains low** in both models—highlighting persistent difficulty for rare high-severity detection.
 
+| TF–IDF + Logistic Regression: per-class test results | DistilBERT: per-class test results |
+|---|---|
+| ![Original Logistic Regression classification report](figures/performance_Logistics.jpg) | ![Original DistilBERT classification report](figures/performance_Distilbert.jpg) |
+
 ---
 
 ### Domain adaptation effect (behavior shift vs. generalization)
@@ -171,9 +173,7 @@ but does **not** generalize to improved overall performance on the CrisisMMD tes
 In particular, increased up-classification of Routine samples introduces additional mid-level confusion,
 and **Critical recall decreases**, increasing high-impact errors under the operational cost matrix.
 
-![Test recall for each severity class across all three models](figures/per_class_recall_comparison.svg)
-
-The overall performance gain is not uniform across classes: **Urgent recall falls from 18.6% with Logistic Regression to 10.5% with DistilBERT**. Lexicon-guided oversampling raises it slightly to 11.6%, but **Critical recall drops from 67.4% to 41.3%** relative to baseline DistilBERT. All values come from the same fixed test set (2,237 examples; one saved run per model).
+![Original domain-adapted DistilBERT classification report](figures/performance_domain_distilbert.jpg)
 
 ---
 
@@ -186,11 +186,9 @@ Confusion matrices reveal systematic confusion between adjacent severity levels 
 While lexicon-guided oversampling alters prediction patterns, it does not consistently reduce high-risk errors involving Urgent/Critical cases.
 
 <details>
-<summary>Compare all three models using row-normalized confusion matrices</summary>
+<summary>TF–IDF + Logistic Regression: original test confusion matrix</summary>
 
-![Row-normalized test confusion matrices for Logistic Regression, DistilBERT, and domain-adapted DistilBERT](figures/confusion_matrices_normalized.svg)
-
-Each row is normalized by its true-class support and totals 100% before rounding; original counts appear in parentheses. A shared 0-100% color scale makes rare-class errors comparable across models. These are the same saved test results as the count matrices above, with the Logistic Regression baseline included.
+![Original Logistic Regression test confusion matrix](figures/confusion_matrix_logistic_basline.jpg)
 
 </details>
 
@@ -209,8 +207,6 @@ Each row is normalized by its true-class support and totals 100% before rounding
 2. Run cells in order: preprocessing → severity mapping → training → evaluation
 3. Figures used in the README are saved in `figures/`
 4. The full written report is available in `report/`
-
-To regenerate the three added figures (SVG and PNG) from the saved result counts without retraining, run `python code/generate_readme_figures.py` (requires NumPy and Pillow). The helper checks the counts against the notebook's published support, accuracy, macro-F1, and cost-sensitive risk before rendering.
 
 ---
 
