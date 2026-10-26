@@ -60,6 +60,10 @@ creating a decision-oriented severity target rather than a descriptive taxonomy.
 After mapping, the new severity variable is **merged back into the original train/validation/test splits**,
 and all models are trained/evaluated on these **fixed mapped splits** for direct comparability.
 
+![Severity distribution across the original training, validation, and test splits](figures/severity_distribution_by_split.svg)
+
+The mapped target remains strongly imbalanced across all three splits. Bars show percentages and counts **before lexicon-guided oversampling**; Urgent and Critical together account for only 5.9% of the test set.
+
 ---
 
 ## Methods
@@ -167,6 +171,10 @@ but does **not** generalize to improved overall performance on the CrisisMMD tes
 In particular, increased up-classification of Routine samples introduces additional mid-level confusion,
 and **Critical recall decreases**, increasing high-impact errors under the operational cost matrix.
 
+![Test recall for each severity class across all three models](figures/per_class_recall_comparison.svg)
+
+The overall performance gain is not uniform across classes: **Urgent recall falls from 18.6% with Logistic Regression to 10.5% with DistilBERT**. Lexicon-guided oversampling raises it slightly to 11.6%, but **Critical recall drops from 67.4% to 41.3%** relative to baseline DistilBERT. All values come from the same fixed test set (2,237 examples; one saved run per model).
+
 ---
 
 ### Confusion Matrix Comparison (Test Set)
@@ -176,6 +184,15 @@ and **Critical recall decreases**, increasing high-impact errors under the opera
 
 Confusion matrices reveal systematic confusion between adjacent severity levels (especially Routine–Elevated and Elevated–Urgent).
 While lexicon-guided oversampling alters prediction patterns, it does not consistently reduce high-risk errors involving Urgent/Critical cases.
+
+<details>
+<summary>Compare all three models using row-normalized confusion matrices</summary>
+
+![Row-normalized test confusion matrices for Logistic Regression, DistilBERT, and domain-adapted DistilBERT](figures/confusion_matrices_normalized.svg)
+
+Each row is normalized by its true-class support and totals 100% before rounding; original counts appear in parentheses. A shared 0-100% color scale makes rare-class errors comparable across models. These are the same saved test results as the count matrices above, with the Logistic Regression baseline included.
+
+</details>
 
 ---
 
@@ -190,14 +207,16 @@ While lexicon-guided oversampling alters prediction patterns, it does not consis
 ## How to Reproduce
 1. Open the notebook: `code/code.ipynb`
 2. Run cells in order: preprocessing → severity mapping → training → evaluation
-3. Figures used in the README are saved in `Figure/`
+3. Figures used in the README are saved in `figures/`
 4. The full written report is available in `report/`
+
+To regenerate the three added figures (SVG and PNG) from the saved result counts without retraining, run `python code/generate_readme_figures.py` (requires NumPy and Pillow). The helper checks the counts against the notebook's published support, accuracy, macro-F1, and cost-sensitive risk before rendering.
 
 ---
 
 ## Repository Structure
 ```text
-├── Figure/     # Figures for EDA and results
+├── figures/     # Figures for EDA and results
 ├── code/       # Full annotated notebook pipeline (single source of truth)
 ├── report/     # Final project report (PDF)
 └── README.md
