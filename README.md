@@ -2,6 +2,8 @@
 **Operational 4-level severity mapping + lexicon-guided oversampling for lightweight domain adaptation**
 
 ## Overview
+**Code:** [Open the notebook in Google Colab](https://colab.research.google.com/drive/1cQWFjaLWntIPXX8NFldaC_QoJUjHR4VA?authuser=1)
+
 This project builds an end-to-end pipeline for **crisis severity classification** from short, noisy social-media text
 using the **CrisisMMD (Humanitarian subset)**. The work is motivated by operational triage settings where
 **underestimating high-severity incidents is far more costly** than minor false alarms.
