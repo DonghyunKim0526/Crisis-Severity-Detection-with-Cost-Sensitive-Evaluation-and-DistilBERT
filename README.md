@@ -243,5 +243,5 @@ While lexicon-guided oversampling alters prediction patterns, it does not consis
 ```text
 ├── figures/     # Figures for EDA and results
 ├── code/       # Full annotated notebook pipeline (single source of truth)
-├── report/     # Final project report (PDF)
+├── report/     # Project report (PDF)
 └── README.md
