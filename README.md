@@ -156,9 +156,27 @@ Reported metrics include:
 Gains are driven primarily by more stable predictions for majority classes (Routine/Elevated) and modest improvement for Critical,
 while **Urgent recall remains low** in both models—highlighting persistent difficulty for rare high-severity detection.
 
-| TF–IDF + Logistic Regression: per-class test results | DistilBERT: per-class test results |
-|---|---|
-| ![Original Logistic Regression classification report](figures/performance_Logistics.jpg) | ![Original DistilBERT classification report](figures/performance_Distilbert.jpg) |
+**TF–IDF + Logistic Regression: per-class test results**
+
+| Class / Average | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Routine | 0.803 | 0.713 | 0.755 | 1,427 |
+| Elevated | 0.525 | 0.560 | 0.542 | 678 |
+| Urgent | 0.099 | 0.186 | 0.130 | 86 |
+| Critical | 0.357 | 0.652 | 0.462 | 46 |
+| Macro average | 0.446 | 0.528 | 0.472 | 2,237 |
+| Weighted average | 0.682 | 0.646 | 0.661 | 2,237 |
+
+**DistilBERT: per-class test results**
+
+| Class / Average | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Routine | 0.785 | 0.805 | 0.795 | 1,427 |
+| Elevated | 0.565 | 0.566 | 0.566 | 678 |
+| Urgent | 0.290 | 0.105 | 0.154 | 86 |
+| Critical | 0.500 | 0.674 | 0.574 | 46 |
+| Macro average | 0.535 | 0.538 | 0.522 | 2,237 |
+| Weighted average | 0.693 | 0.703 | 0.696 | 2,237 |
 
 ---
 
@@ -173,7 +191,16 @@ but does **not** generalize to improved overall performance on the CrisisMMD tes
 In particular, increased up-classification of Routine samples introduces additional mid-level confusion,
 and **Critical recall decreases**, increasing high-impact errors under the operational cost matrix.
 
-![Original domain-adapted DistilBERT classification report](figures/performance_domain_distilbert.jpg)
+**Domain-adapted DistilBERT: per-class test results**
+
+| Class / Average | Precision | Recall | F1-score | Support |
+|---|---:|---:|---:|---:|
+| Routine | 0.780 | 0.783 | 0.781 | 1,427 |
+| Elevated | 0.541 | 0.571 | 0.556 | 678 |
+| Urgent | 0.227 | 0.116 | 0.154 | 86 |
+| Critical | 0.413 | 0.413 | 0.413 | 46 |
+| Macro average | 0.490 | 0.471 | 0.476 | 2,237 |
+| Weighted average | 0.679 | 0.685 | 0.681 | 2,237 |
 
 ---
 
